@@ -35,6 +35,7 @@ const ColorList = ({ colors, updateColors }) => {
       .catch(err => {
         throw err;
       });
+    window.location.reload(false);
   };
 
   const deleteColor = id => {
@@ -49,6 +50,7 @@ const ColorList = ({ colors, updateColors }) => {
         .catch(err => {
           throw err;
         });
+      window.location.reload(false);
     }
   };
 
@@ -62,6 +64,7 @@ const ColorList = ({ colors, updateColors }) => {
       .catch(err => {
         throw (err)
       })
+    window.location.reload(false);
   }
 
   return (
