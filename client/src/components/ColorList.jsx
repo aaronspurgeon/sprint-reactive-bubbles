@@ -11,6 +11,10 @@ const ColorList = ({ colors, updateColors }) => {
   console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
+  const [newColor, setNewColor] = useState({
+    color: "",
+    code: { hex: "" }
+  });
 
   const editColor = color => {
     setEditing(true);
@@ -22,6 +26,15 @@ const ColorList = ({ colors, updateColors }) => {
     // Make a put request to save your updated color
     // think about where will you get the id from...
     // where is is saved right now?
+    api()
+      .put(`/api/colors/${colorToEdit.id}`, colorToEdit)
+      .then(res => {
+        setEditing(false);
+        console.log(colorToEdit);
+      })
+      .catch(err => {
+        throw err;
+      });
   };
 
   const deleteColor = id => {
@@ -38,6 +51,18 @@ const ColorList = ({ colors, updateColors }) => {
         });
     }
   };
+
+  const handleNewColor = (e) => {
+    e.preventDefault()
+
+    api().post('/api/colors', newColor)
+      .then(res => {
+        console.log(newColor)
+      })
+      .catch(err => {
+        throw (err)
+      })
+  }
 
   return (
     <div className="colors-wrap">
@@ -95,7 +120,31 @@ const ColorList = ({ colors, updateColors }) => {
         </form>
       )}
       <div className="spacer" />
-      {/* stretch - build another form here to add a color */}
+      <form onSubmit={handleNewColor}>
+        <label>
+          color name:
+            <input
+            onChange={e =>
+              setNewColor({ ...newColor, color: e.target.value })
+            }
+            value={newColor.color}
+          />
+        </label>
+        <label>
+          hex code:
+            <input
+            onChange={e =>
+              setNewColor({
+                ...newColor,
+                code: { hex: e.target.value }
+              })
+            }
+            value={newColor.code.hex}
+          />
+        </label>
+
+        <button type='submit'>Add Color</button>
+      </form>
     </div>
   );
 };
