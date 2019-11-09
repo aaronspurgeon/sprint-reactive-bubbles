@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import api from "../utils/api";
 
 const initialColor = {
   color: "",
@@ -23,8 +24,19 @@ const ColorList = ({ colors, updateColors }) => {
     // where is is saved right now?
   };
 
-  const deleteColor = color => {
-    // make a delete request to delete this color
+  const deleteColor = id => {
+    if (window.confirm("Are you sure you want to delete this color?")) {
+      updateColors(colors.filter(color => color.id !== id));
+
+      api()
+        .delete(`/api/colors/${id}`)
+        .then(res => {
+          console.log(`Color with ID: ${id}, was deleted`);
+        })
+        .catch(err => {
+          throw err;
+        });
+    }
   };
 
   return (
@@ -34,12 +46,14 @@ const ColorList = ({ colors, updateColors }) => {
         {colors.map(color => (
           <li key={color.color} onClick={() => editColor(color)}>
             <span>
-              <span className="delete" onClick={e => {
-                    e.stopPropagation();
-                    deleteColor(color)
-                  }
-                }>
-                  x
+              <span
+                className="delete"
+                onClick={e => {
+                  e.stopPropagation();
+                  deleteColor(color.id);
+                }}
+              >
+                x
               </span>{" "}
               {color.color}
             </span>
