@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import api from "../utils/api";
 
-const Login = () => {
+const Login = (props) => {
   const [err, setErr] = useState();
   const [data, setData] = useState({
     username: "",
@@ -20,7 +20,7 @@ const Login = () => {
     api().post('/api/login', data)
       .then(res => {
         localStorage.setItem('token', res.data.payload)
-
+        props.history.push('/bubbles')
       })
       .catch(err => {
         setErr(err.response.data.message)
